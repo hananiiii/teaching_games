@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangul Detective Agency - Enhanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .detective-badge {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin: 20px 0;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .case-info {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .story-progress {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #856404;
+        }
+
+        .clue-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .challenge-type {
+            background: #17a2b8;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .hangul-display {
+            font-size: 4em;
+            color: #2c3e50;
+            text-align: center;
+            margin: 20px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px dashed #bdc3c7;
+            position: relative;
+        }
+
+        .hangul-display:hover {
+            background: linear-gradient(135deg, #e8f6f3, #d1f2eb);
+            border-color: #27ae60;
+            transform: scale(1.02);
+        }
+
+        .word-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .syllable {
+            font-size: 2.5em;
+            color: #2c3e50;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .meaning-hint {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1.1em;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .option-btn.correct {
+            background: #27ae60;
+            animation: correctAnswer 0.6s ease;
+        }
+
+        .option-btn.wrong {
+            background: #e74c3c;
+            animation: wrongAnswer 0.6s ease;
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wrongAnswer {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            height: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.wrong {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .next-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: none;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .restart-btn {
+            background: #8e44ad;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #7d3c98;
+            transform: translateY(-2px);
+        }
+
+        .hangul-guide {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #17a2b8;
+        }
+
+        .guide-title {
+            color: #17a2b8;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .guide-item {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .guide-hangul {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .guide-sound {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .story-item {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .location-indicator {
+            background: #ffeaa7;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            border: 2px solid #fdcb6e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">🕵️ Hangul Detective Agency 🕵️</h1>
+            <p class="subtitle">Solve the mystery by decoding Korean words and clues!</p>
+            <div class="detective-badge">Detective Badge: Korean Word Solver</div>
+        </div>
+
+        <div class="hangul-guide">
+            <h3 class="guide-title">🔍 Detective's Hangul Reference Guide</h3>
+            <div class="guide-grid">
+                <div class="guide-item">
+                    <div class="guide-hangul">가</div>
+                    <div class="guide-sound">ga</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">나</div>
+                    <div class="guide-sound">na</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">다</div>
+                    <div class="guide-sound">da</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">라</div>
+                    <div class="guide-sound">ra</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">마</div>
+                    <div class="guide-sound">ma</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">바</div>
+                    <div class="guide-sound">ba</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">사</div>
+                    <div class="guide-sound">sa</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">아</div>
+                    <div class="guide-sound">a</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">이</div>
+                    <div class="guide-sound">i</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">오</div>
+                    <div class="guide-sound">o</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">우</div>
+                    <div class="guide-sound">u</div>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-hangul">리</div>
+                    <div class="guide-sound">ri</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="case-info">
+            <h2>🔍 Case: The Secret of Teacher Kim's Missing Lunch</h2>
+            <p>Detective, our beloved Teacher Kim's homemade lunch has mysteriously disappeared from the faculty room! The thief left behind Korean word clues that will lead us to the location where they hid the lunch. Each clue contains a Korean word that points to the next location. Can you decode them and recover Teacher Kim's delicious lunch before lunchtime ends?</p>
+        </div>
+
+        <div class="story-progress" id="story-progress">
+            🏫 <strong>Current Location:</strong> You start your investigation at the school entrance...
+        </div>
+
+        <div class="score">Score: <span id="score">0</span> / <span id="total">0</span></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <div class="clue-section" id="game-area">
+            <div class="challenge-type" id="challenge-type">Single Character Challenge</div>
+            <h3>🔍 Clue <span id="clue-number">1</span>:</h3>
+            <p id="clue-text">The first clue is hidden in this character. What sound does it make?</p>
+            
+            <div class="hangul-display" id="hangul-display">가</div>
+            <div class="word-breakdown" id="word-breakdown" style="display: none;"></div>
+            <div class="meaning-hint" id="meaning-hint" style="display: none;"></div>
+            <div class="location-indicator" id="location-indicator" style="display: none;"></div>
+            
+            <div class="options" id="options-container">
+                <button class="option-btn" onclick="selectAnswer(0)">ga</button>
+                <button class="option-btn" onclick="selectAnswer(1)">na</button>
+                <button class="option-btn" onclick="selectAnswer(2)">da</button>
+                <button class="option-btn" onclick="selectAnswer(3)">ka</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+            <button class="next-btn" id="next-btn" onclick="nextClue()">Follow the Clue 🔍</button>
+        </div>
+
+        <div class="final-score" id="final-score">
+            <h2>🎉 Case Solved! 🎉</h2>
+            <p>Excellent detective work! You've found Teacher Kim's lunch and saved the day!</p>
+            <div class="story-item">
+                <strong>🍱 Case Summary:</strong> The lunch thief turned out to be the school's mischievous cat, who had knocked over the lunch box while chasing a mouse through the faculty room. Thanks to your Korean language skills, you followed the trail of clues the cat accidentally left behind with muddy paw prints on Korean vocabulary cards!
+            </div>
+            <p>Your final score: <span id="final-score-text">0</span></p>
+            <button class="restart-btn" onclick="restartGame()">Solve Another Mystery</button>
+        </div>
+    </div>
+
+    <script>
+        const gameData = [
+            {
+                type: "character",
+                hangul: "가",
+                correct: "ga",
+                options: ["ga", "na", "da", "ka"],
+                clue: "You find muddy paw prints near the school entrance. Next to them is this Korean character written in chalk. What sound does it make?",
+                story: "Perfect! 'ga' - The paw prints lead toward the garden (가든)!",
+                location: "🌿 Following the trail to the school garden...",
+                challengeType: "Single Character"
+            },
+            {
+                type: "word",
+                hangul: "나무",
+                syllables: ["나", "무"],
+                correct: "tree",
+                options: ["tree", "flower", "grass", "stone"],
+                clue: "In the garden, you find this Korean word carved into a wooden post. What does this word mean?",
+                story: "Excellent! 나무 (namu) means 'tree' - There are scratch marks on the big tree by the library!",
+                location: "📚 Moving to the library area...",
+                hint: "This word has two syllables: 나 (na) + 무 (mu)",
+                challengeType: "Word Translation"
+            },
+            {
+                type: "character",
+                hangul: "문",
+                correct: "door",
+                options: ["door", "window", "wall", "roof"],
+                clue: "Near the library tree, you spot this character on a piece of paper caught in the branches. What does this mean?",
+                story: "Great detective work! 문 (mun) means 'door' - Check the music room door!",
+                location: "🎵 Heading to the music room...",
+                challengeType: "Character Meaning"
+            },
+            {
+                type: "word",
+                hangul: "음악",
+                syllables: ["음", "악"],
+                correct: "music",
+                options: ["music", "art", "science", "math"],
+                clue: "The music room door has this word written on it in Korean. Can you translate it?",
+                story: "Perfect! 음악 (eumak) means 'music' - But wait, there's a note saying 'Not here, try the 책 place!'",
+                location: "🤔 What could '책' mean? Let's find out...",
+                hint: "음 (eum) + 악 (ak) = a subject you study",
+                challengeType: "Word Translation"
+            },
+            {
+                type: "character",
+                hangul: "책",
+                correct: "book",
+                options: ["book", "desk", "chair", "bag"],
+                clue: "You remember seeing this character in your Korean textbook. What does 책 mean?",
+                story: "Brilliant! 책 (chaek) means 'book' - The library! Let's go back there!",
+                location: "📖 Returning to the library with new information...",
+                challengeType: "Character Meaning"
+            },
+            {
+                type: "word",
+                hangul: "도서관",
+                syllables: ["도", "서", "관"],
+                correct: "library",
+                options: ["library", "classroom", "cafeteria", "office"],
+                clue: "Inside the library, this word is written above the entrance in Korean and English. What's the Korean word for library?",
+                story: "Fantastic! 도서관 (doseogwan) means 'library' - You check behind the Korean language section...",
+                location: "📚 Searching the Korean language books section...",
+                hint: "도 (do) + 서 (seo) + 관 (gwan) = place where books are kept",
+                challengeType: "Word Translation"
+            },
+            {
+                type: "word",
+                hangul: "식사",
+                syllables: ["식", "사"],
+                correct: "meal",
+                options: ["meal", "snack", "drink", "candy"],
+                clue: "Behind the Korean books, you find a final note with this word. What does it mean?",
+                story: "Excellent! 식사 (siksa) means 'meal' - You found it! Teacher Kim's lunch box is hidden behind the Korean dictionary!",
+                location: "🍱 Success! The lunch box is found!",
+                hint: "식 (sik) + 사 (sa) = what you eat at lunchtime",
+                challengeType: "Word Translation"
+            },
+            {
+                type: "bonus",
+                hangul: "감사합니다",
+                syllables: ["감", "사", "합", "니", "다"],
+                correct: "thank you",
+                options: ["thank you", "goodbye", "hello", "sorry"],
+                clue: "Teacher Kim is so grateful! She says this phrase to you. What does it mean?",
+                story: "Perfect! 감사합니다 (gamsahamnida) means 'thank you' - Case closed, detective!",
+                location: "🎉 Mission accomplished!",
+                hint: "This is a polite way to express gratitude in Korean",
+                challengeType: "Bonus Phrase"
+            }
+        ];
+
+        let currentClue = 0;
+        let score = 0;
+        let gameCompleted = false;
+
+        function updateDisplay() {
+            const current = gameData[currentClue];
+            
+            // Update challenge type
+            document.getElementById('challenge-type').textContent = current.challengeType;
+            
+            // Update main display
+            if (current.type === "word" && current.syllables) {
+                document.getElementById('hangul-display').style.display = 'none';
+                document.getElementById('word-breakdown').style.display = 'flex';
+                document.getElementById('word-breakdown').innerHTML = '';
+                
+                current.syllables.forEach(syllable => {
+                    const syllableDiv = document.createElement('div');
+                    syllableDiv.className = 'syllable';
+                    syllableDiv.textContent = syllable;
+                    document.getElementById('word-breakdown').appendChild(syllableDiv);
+                });
+                
+                if (current.hint) {
+                    document.getElementById('meaning-hint').style.display = 'block';
+                    document.getElementById('meaning-hint').textContent = current.hint;
+                }
+            } else {
+                document.getElementById('hangul-display').style.display = 'block';
+                document.getElementById('hangul-display').textContent = current.hangul;
+                document.getElementById('word-breakdown').style.display = 'none';
+                document.getElementById('meaning-hint').style.display = 'none';
+            }
+            
+            // Update clue text and number
+            document.getElementById('clue-text').textContent = current.clue;
+            document.getElementById('clue-number').textContent = currentClue + 1;
+            
+            // Update story progress
+            if (currentClue > 0) {
+                document.getElementById('story-progress').innerHTML = gameData[currentClue - 1].location;
+            }
+            
+            // Update options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            current.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            // Update progress
+            const progress = ((currentClue) / gameData.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            document.getElementById('total').textContent = gameData.length;
+        }
+
+        function selectAnswer(selectedIndex) {
+            const current = gameData[currentClue];
+            const selectedAnswer = current.options[selectedIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('feedback');
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            if (selectedAnswer === current.correct) {
+                buttons[selectedIndex].classList.add('correct');
+                feedback.textContent = "🎉 Correct! " + current.story;
+                feedback.className = 'feedback correct show';
+                score++;
+                document.getElementById('score').textContent = score;
+                
+                // Update location
+                document.getElementById('story-progress').innerHTML = current.location;
+            } else {
+                buttons[selectedIndex].classList.add('wrong');
+                // Show correct answer
+                buttons.forEach((btn, index) => {
+                    if (current.options[index] === current.correct) {
+                        btn.classList.add('correct');
+                    }
+                });
+                feedback.textContent = "❌ Not quite! The correct answer is '" + current.correct + "'. " + current.story;
+                feedback.className = 'feedback wrong show';
+                
+                // Still update location to continue story
+                document.getElementById('story-progress').innerHTML = current.location;
+            }
+            
+            // Show next button or finish game
+            if (currentClue < gameData.length - 1) {
+                document.getElementById('next-btn').style.display = 'block';
+            } else {
+                setTimeout(finishGame, 3000);
+            }
+        }
+
+        function nextClue() {
+            currentClue++;
+            
+            // Reset buttons
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('correct', 'wrong');
+                btn.style.pointerEvents = 'auto';
+            });
+            
+            // Hide feedback and next button
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('next-btn').style.display = 'none';
+            
+            updateDisplay();
+        }
+
+        function finishGame() {
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('final-score').style.display = 'block';
+            document.getElementById('final-score-text').textContent = score + ' / ' + gameData.length;
+            
+            // Update progress to 100%
+            document.getElementById('progress').style.width = '100%';
+        }
+
+        function restartGame() {
+            currentClue = 0;
+            score = 0;
+            gameCompleted = false;
+            
+            document.getElementById('score').textContent = '0';
+            document.getElementById('game-area').style.display = 'block';
+            document.getElementById('final-score').style.display = 'none';
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('story-progress').innerHTML = "🏫 <strong>Current Location:</strong> You start your investigation at the school entrance...";
+            
+            updateDisplay();
+        }
+
+        // Initialize game
+        updateDisplay();
+    </script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangul Matching Adventure! 한글 매칭 어드벤처!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+            animation: rainbow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes rainbow {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .status-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(240, 147, 251, 0.3);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(240, 147, 251, 0.4);
+        }
+
+        .status-card:nth-child(2) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 8px 32px rgba(79, 172, 254, 0.3);
+        }
+
+        .status-card:nth-child(3) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 8px 32px rgba(67, 233, 123, 0.3);
+        }
+
+        .status-card:nth-child(4) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            box-shadow: 0 8px 32px rgba(250, 112, 154, 0.3);
+        }
+
+        .status-card:nth-child(5) {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            box-shadow: 0 8px 32px rgba(168, 237, 234, 0.3);
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .game-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .korean-header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
+        }
+
+        .english-header {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .section-subtitle {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 12px;
+        }
+
+        .game-button {
+            padding: 20px 15px;
+            font-size: 1.2em;
+            font-weight: 500;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .game-button:hover::before {
+            left: 100%;
+        }
+
+        .game-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .game-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .game-button.selected {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .game-button.correct {
+            background: linear-gradient(135deg, #2ed573 0%, #7bed9f 100%);
+            animation: correctPulse 0.6s ease-in-out;
+        }
+
+        .game-button.wrong {
+            background: linear-gradient(135deg, #ff3838 0%, #ff6b6b 100%);
+            animation: wrongShake 0.6s ease-in-out;
+        }
+
+        .game-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .game-button.disabled:hover {
+            transform: none;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .control-button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-button {
+            display: block;
+            margin: 20px auto;
+            padding: 20px 40px;
+            font-size: 1.3em;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .result {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.3em;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .corrections {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1em;
+        }
+
+        .corrections h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .corrections ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .corrections li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .title {
+                font-size: 2.2em;
+            }
+            
+            .status-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+                gap: 8px;
+            }
+            
+            .game-button {
+                padding: 15px 10px;
+                font-size: 1.1em;
+                min-height: 60px;
+            }
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            color: rgba(102, 126, 234, 0.1);
+            font-size: 2em;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-elements">
+            <div class="floating-element" style="left: 10%; top: 20%; animation-delay: 0s;">한</div>
+            <div class="floating-element" style="left: 80%; top: 30%; animation-delay: 1s;">글</div>
+            <div class="floating-element" style="left: 20%; top: 70%; animation-delay: 2s;">♥</div>
+            <div class="floating-element" style="left: 70%; top: 10%; animation-delay: 3s;">★</div>
+            <div class="floating-element" style="left: 90%; top: 80%; animation-delay: 4s;">♫</div>
+        </div>
+
+        <div class="header">
+            <h1 class="title">Hangul Matching Adventure!</h1>
+            <p class="subtitle">Match Korean characters with their pronunciations • 한글 발음 맞추기 게임</p>
+        </div>
+
+        <button class="start-button" id="startBtn">🎮 게임 시작 • Start Game!</button>
+
+        <div class="status-bar" style="display: none;">
+            <div class="status-card">
+                <div class="status-label">남은 기회 • Remaining</div>
+                <div class="status-value" id="guesses">40</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">정답 • Correct</div>
+                <div class="status-value" id="correct">0</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">오답 • Wrong</div>
+                <div class="status-value" id="wrong">0</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">점수 • Score</div>
+                <div class="status-value" id="score">0/40</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">시간 • Timer</div>
+                <div class="status-value" id="timer">03:00</div>
+            </div>
+        </div>
+
+        <div class="progress-container" style="display: none;">
+            <div class="progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="game-area" style="display: none;">
+            <div class="game-section">
+                <div class="section-header korean-header">
+                    <div class="section-title">한글 문자 • Korean Characters</div>
+                    <div class="section-subtitle">Click a character to select</div>
+                </div>
+                <div class="grid" id="hangulGrid">
+                    <!-- Korean characters will be populated here -->
+                </div>
+            </div>
+
+            <div class="game-section">
+                <div class="section-header english-header">
+                    <div class="section-title">English Pronunciation</div>
+                    <div class="section-subtitle">Click the matching sound</div>
+                </div>
+                <div class="grid" id="pronunciationGrid">
+                    <!-- Pronunciation options will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="controls" style="display: none;">
+            <button class="control-button" onclick="resetGame()">🎮 새 게임 • Play Again!</button>
+            <button class="control-button" onclick="pauseGame()" id="pauseBtn">⏸️ 일시정지 • Pause</button>
+        </div>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const hangulData = [
+            { char: "ㄱ", pron: "g/k", end: "k" },
+            { char: "ㄴ", pron: "n", end: "n" },
+            { char: "ㄷ", pron: "d/t", end: "t" },
+            { char: "ㄹ", pron: "r/l", end: "l" },
+            { char: "ㅁ", pron: "m", end: "m" },
+            { char: "ㅂ", pron: "b/p", end: "p" },
+            { char: "ㅅ", pron: "s", end: "t" },
+            { char: "ㅇ", pron: "silent/ng", end: "ng" },
+            { char: "ㅈ", pron: "j", end: "t" },
+            { char: "ㅊ", pron: "ch", end: "t" },
+            { char: "ㅋ", pron: "k (aspirated)" },
+            { char: "ㅌ", pron: "t (aspirated)" },
+            { char: "ㅍ", pron: "p (aspirated)" },
+            { char: "ㅎ", pron: "h" },
+            { char: "ㅏ", pron: "a" },
+            { char: "ㅑ", pron: "ya" },
+            { char: "ㅓ", pron: "eo" },
+            { char: "ㅕ", pron: "yeo" },
+            { char: "ㅗ", pron: "o" },
+            { char: "ㅛ", pron: "yo" },
+            { char: "ㅜ", pron: "u" },
+            { char: "ㅠ", pron: "yu" },
+            { char: "ㅡ", pron: "eu" },
+            { char: "ㅣ", pron: "i" }
+        ];
+
+        let guesses = 40;
+        let correct = 0;
+        let wrong = 0;
+        let selectedHangul = null;
+        let selectedButton = null;
+        let timer;
+        let timeLeft = 180;
+        let isPaused = false;
+        let gameStarted = false;
+        let wrongAnswers = [];
+
+        function shuffle(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function startGame() {
+            gameStarted = true;
+            document.getElementById("startBtn").style.display = "none";
+            document.querySelector(".status-bar").style.display = "grid";
+            document.querySelector(".progress-container").style.display = "block";
+            document.querySelector(".game-area").style.display = "grid";
+            document.querySelector(".controls").style.display = "block";
+
+            const hangulGrid = document.getElementById("hangulGrid");
+            const pronGrid = document.getElementById("pronunciationGrid");
+            hangulGrid.innerHTML = "";
+            pronGrid.innerHTML = "";
+            wrongAnswers = [];
+
+            // Populate Korean characters
+            const shuffledHangul = shuffle(hangulData);
+            shuffledHangul.forEach(item => {
+                const button = document.createElement("button");
+                button.className = "game-button";
+                button.textContent = item.char;
+                button.onclick = () => selectHangul(item.char, button);
+                hangulGrid.appendChild(button);
+            });
+
+            // Populate pronunciation options
+            const pronOptions = [...hangulData.map(item => item.pron), ...hangulData.filter(item => item.end).map(item => item.end)].filter((v, i, a) => a.indexOf(v) === i);
+            const shuffledPron = shuffle(pronOptions);
+            shuffledPron.slice(0, 24).forEach(pron => {
+                const button = document.createElement("button");
+                button.className = "game-button";
+                button.textContent = pron;
+                button.onclick = () => selectPronunciation(pron, button);
+                pronGrid.appendChild(button);
+            });
+
+            // Start timer
+            updateTimer();
+            timer = setInterval(() => {
+                if (!isPaused) {
+                    updateTimer();
+                }
+            }, 1000);
+
+            updateProgressBar();
+        }
+
+        function selectHangul(char, button) {
+            if (!gameStarted || button.disabled) return;
+            if (selectedButton) {
+                selectedButton.classList.remove('selected');
+            }
+            selectedHangul = char;
+            selectedButton = button;
+            button.classList.add('selected');
+        }
+
+        function selectPronunciation(pron, button) {
+            if (!selectedHangul || button.disabled) return;
+            
+            const hangulItem = hangulData.find(item => item.char === selectedHangul);
+            const isCorrect = hangulItem.pron === pron || (hangulItem.end && hangulItem.end === pron);
+            
+            if (isCorrect) {
+                button.classList.add('correct');
+                correct++;
+                document.getElementById("correct").textContent = correct;
+                showFloatingText("정답! 🎉", button, '#2ed573');
+            } else {
+                button.classList.add('wrong');
+                wrong++;
+                document.getElementById("wrong").textContent = wrong;
+                showFloatingText("다시! 😊", button, '#ff3838');
+                wrongAnswers.push({
+                    char: selectedHangul,
+                    selectedPron: pron,
+                    correctPron: hangulItem.pron,
+                    correctEnd: hangulItem.end
+                });
+            }
+            
+            guesses--;
+            document.getElementById("guesses").textContent = guesses;
+            
+            if (selectedButton) {
+                selectedButton.classList.remove('selected');
+                selectedButton.classList.add('disabled');
+                selectedButton.disabled = true;
+            }
+            
+            selectedHangul = null;
+            selectedButton = null;
+            button.disabled = true;
+            button.classList.add('disabled');
+            
+            updateScore();
+            updateProgressBar();
+            checkGameEnd();
+        }
+
+        function showFloatingText(text, element, color) {
+            const floatingText = document.createElement('div');
+            floatingText.textContent = text;
+            floatingText.style.cssText = `
+                position: absolute;
+                color: ${color};
+                font-weight: bold;
+                font-size: 1.2em;
+                pointer-events: none;
+                animation: floatUp 1s ease-out forwards;
+                z-index: 1000;
+            `;
+            
+            const rect = element.getBoundingClientRect();
+            floatingText.style.left = rect.left + rect.width / 2 + 'px';
+            floatingText.style.top = rect.top + 'px';
+            
+            document.body.appendChild(floatingText);
+            
+            // Add CSS animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes floatUp {
+                    0% { transform: translateY(0) translateX(-50%); opacity: 1; }
+                    100% { transform: translateY(-50px) translateX(-50%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            setTimeout(() => {
+                document.body.removeChild(floatingText);
+                document.head.removeChild(style);
+            }, 1000);
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                endGame();
+                return;
+            }
+            
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById("timer").textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateScore() {
+            document.getElementById("score").textContent = `${correct}/40`;
+        }
+
+        function updateProgressBar() {
+            const progress = (correct / 40) * 100;
+            document.getElementById("progress-bar").style.width = `${progress}%`;
+        }
+
+        function checkGameEnd() {
+            if (guesses <= 0 || correct + wrong >= 40) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            if (timer) clearInterval(timer);
+            gameStarted = false;
+            
+            const resultDiv = document.getElementById("result");
+            resultDiv.style.display = "block";
+            
+            let message = "";
+            let emoji = "";
+            const scorePercentage = (correct / 40) * 100;
+            
+            if (scorePercentage >= 90) {
+                message = "완벽해요! 한글 마스터! • Perfect! Hangul Master!";
+                emoji = "🏆✨";
+            } else if (scorePercentage >= 70) {
+                message = "훌륭해요! 잘했어요! • Excellent! Great job!";
+                emoji = "🎉👏";
+            } else if (scorePercentage >= 50) {
+                message = "좋아요! 계속 연습해요! • Good! Keep practicing!";
+                emoji = "👍😊";
+            } else {
+                message = "괜찮아요! 다시 도전해요! • It's okay! Try again!";
+                emoji = "😄💪";
+            }
+            
+            let correctionsHtml = "";
+            if (wrongAnswers.length > 0) {
+                correctionsHtml = `
+                    <div class="corrections">
+                        <h3>오답 정정 • Corrections</h3>
+                        <ul>
+                            ${wrongAnswers.map(answer => `
+                                <li>한글: ${answer.char} - 선택한 발음: ${answer.selectedPron} → 정답: ${answer.correctPron}${answer.correctEnd ? ` (또는 ${answer.correctEnd})` : ''}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            resultDiv.innerHTML = `
+                ${emoji}<br>
+                게임 끝! • Game Over!<br>
+                ${message}<br>
+                <strong>최종 점수 • Final Score: ${correct}/40 (${scorePercentage.toFixed(1)}%)</strong>
+                ${correctionsHtml}
+            `;
+            
+            document.querySelectorAll(".game-button").forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+            });
+        }
+
+        function pauseGame() {
+            if (!gameStarted) return;
+            
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            
+            if (isPaused) {
+                pauseBtn.textContent = '▶️ 계속 • Resume';
+                document.querySelectorAll(".game-button").forEach(btn => {
+                    btn.style.opacity = '0.5';
+                    btn.style.pointerEvents = 'none';
+                });
+            } else {
+                pauseBtn.textContent = '⏸️ 일시정지 • Pause';
+                document.querySelectorAll(".game-button").forEach(btn => {
+                    if (!btn.disabled) {
+                        btn.style.opacity = '1';
+                        btn.style.pointerEvents = 'auto';
+                    }
+                });
+            }
+        }
+
+        function resetGame() {
+            if (timer) clearInterval(timer);
+            
+            guesses = 40;
+            correct = 0;
+            wrong = 0;
+            timeLeft = 120;
+            isPaused = false;
+            selectedHangul = null;
+            selectedButton = null;
+            wrongAnswers = [];
+            
+            document.getElementById("guesses").textContent = guesses;
+            document.getElementById("correct").textContent = correct;
+            document.getElementById("wrong").textContent = wrong;
+            document.getElementById("score").textContent = "0/40";
+            document.getElementById("timer").textContent = "03:00";
+            document.getElementById("result").style.display = "none";
+            document.getElementById("pauseBtn").textContent = "⏸️ 일시정지 • Pause";
+            document.getElementById("startBtn").style.display = "block";
+            document.querySelector(".status-bar").style.display = "none";
+            document.querySelector(".progress-container").style.display = "none";
+            document.querySelector(".game-area").style.display = "none";
+            document.querySelector(".controls").style.display = "none";
+            
+            document.querySelectorAll(".game-button").forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'wrong', 'disabled');
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+        }
+
+        document.getElementById("startBtn").onclick = startGame;
+    </script>
+</body>
+</html>
