@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Grammar Adventure Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: slideDown 1s ease-out;
+        }
+
+        .title {
+            font-size: 3em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: colorShift 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 20px;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: white;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .game-modes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        .mode-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .game-area {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: slideUp 1s ease-out 1.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-area::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .question-container {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .question-text {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .korean-text {
+            font-size: 2.5em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: bounce 1s ease-in-out;
+        }
+
+        .object-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .object-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 1.5em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: rotateIn 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .object-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .option-btn {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            animation: correctAnswer 0.6s ease-out;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #e17055, #d63031);
+            animation: wrongAnswer 0.6s ease-out;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .feedback.wrong {
+            background: linear-gradient(135deg, #f8d7da, #f1b0b7);
+            color: #721c24;
+            border: 2px solid #f1b0b7;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            animation: zoomIn 1s ease-out;
+        }
+
+        .completion-title {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .final-score {
+            font-size: 2em;
+            margin: 20px 0;
+            color: #4ecdc4;
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .instructions-screen, .vocabulary-screen, .progress-screen {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: slideUp 1s ease-out;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rotateIn {
+            from { transform: rotate(-180deg) scale(0); opacity: 0; }
+            to { transform: rotate(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wrongAnswer {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes colorShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(180deg); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes borderGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            33% { transform: translateY(-30px) rotate(120deg); opacity: 0.8; }
+            66% { transform: translateY(-60px) rotate(240deg); opacity: 0.6; }
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2em; }
+            .game-stats { flex-direction: column; gap: 15px; }
+            .game-modes { flex-direction: column; }
+            .options-grid { grid-template-columns: 1fr; }
+            .game-area { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">🌟 Korean Grammar Adventure 🌟</h1>
+            <p class="subtitle">Master "This is..." and "Is this...?" through Epic Gameplay!</p>
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="score">0</div>
+                <div>Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="level">1</div>
+                <div>Level</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="streak">0</div>
+                <div>Streak</div>
+            </div>
+        </div>
+
+        <div class="game-modes">
+            <button class="mode-btn active" onclick="setGameMode('statements')">
+                📝 Unit 1: Statements (N입니다)
+            </button>
+            <button class="mode-btn" onclick="setGameMode('questions')">
+                ❓ Unit 2: Questions (N입니까?)
+            </button>
+            <button class="mode-btn" onclick="setGameMode('mixed')">
+                🎯 Mixed Challenge
+            </button>
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-text" id="questionText">Welcome to Korean Grammar Adventure!</div>
+                <div class="korean-text" id="koreanText">시작해요! (Let's start!)</div>
+            </div>
+
+            <div class="object-display">
+                <div class="object-card" id="objectCard">
+                    Ready to learn Korean? 🚀
+                </div>
+            </div>
+
+            <div class="options-grid" id="optionsGrid">
+                <button class="option-btn" onclick="startGame()">🎮 Start Game</button>
+                <button class="option-btn" onclick="showInstructions()">📚 Instructions</button>
+                <button class="option-btn" onclick="showVocabulary()">📖 Vocabulary</button>
+                <button class="option-btn" onclick="showProgress()">📊 Progress</button>
+            </div>
+
+            <div class="feedback" id="feedback" style="display: none;"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question →</button>
+        </div>
+    </div>
+
+    <script>
+        // Audio context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const sounds = {
+            start: createAudioBuffer(200, 440),
+            correct: createAudioBuffer(300, 523.25),
+            wrong: createAudioBuffer(300, 261.63),
+            levelup: createAudioBuffer(500, 659.25),
+            complete: createAudioBuffer(600, 784)
+        };
+
+        function createAudioBuffer(duration, frequency) {
+            const sampleRate = audioContext.sampleRate;
+            const frameCount = sampleRate * duration / 1000;
+            const arrayBuffer = audioContext.createBuffer(1, frameCount, sampleRate);
+            const data = arrayBuffer.getChannelData(0);
+
+            for (let i = 0; i < frameCount; i++) {
+                data[i] = Math.sin(2 * Math.PI * frequency * i / sampleRate) * 0.5 * (1 - i / frameCount);
+            }
+
+            return arrayBuffer;
+        }
+
+        function playSound(type) {
+            const source = audioContext.createBufferSource();
+            source.buffer = sounds[type];
+            source.connect(audioContext.destination);
+            source.start();
+        }
+
+        // Game state
+        let currentMode = 'statements';
+        let currentQuestion = 0;
+        let score = 0;
+        let level = 1;
+        let streak = 0;
+        let maxStreak = 0;
+        let questionsAnswered = 0;
+        let correctAnswers = 0;
+        let gameStarted = false;
+
+        // Vocabulary data
+        const vocabulary = {
+            classroom: [
+                {korean: '책', pronunciation: 'chaek', english: 'book', emoji: '📚'},
+                {korean: '펜', pronunciation: 'pen', english: 'pen', emoji: '🖊️'},
+                {korean: '연필', pronunciation: 'yeon-pil', english: 'pencil', emoji: '✏️'},
+                {korean: '가방', pronunciation: 'ga-bang', english: 'bag', emoji: '🎒'},
+                {korean: '공책', pronunciation: 'gong-chaek', english: 'notebook', emoji: '📓'},
+                {korean: '지우개', pronunciation: 'ji-u-gae', english: 'eraser', emoji: '🧽'},
+                {korean: '사전', pronunciation: 'sa-jeon', english: 'dictionary', emoji: '📖'},
+                {korean: '칠판', pronunciation: 'chil-pan', english: 'blackboard', emoji: '📋'}
+            ],
+            home: [
+                {korean: '컴퓨터', pronunciation: 'keom-pyu-teo', english: 'computer', emoji: '💻'},
+                {korean: '시계', pronunciation: 'si-gye', english: 'watch', emoji: '⌚'},
+                {korean: '전화', pronunciation: 'jeon-hwa', english: 'telephone', emoji: '📞'},
+                {korean: '의자', pronunciation: 'ui-ja', english: 'chair', emoji: '🪑'},
+                {korean: '책상', pronunciation: 'chaek-sang', english: 'desk', emoji: '🪑'},
+                {korean: '창문', pronunciation: 'chang-mun', english: 'window', emoji: '🪟'},
+                {korean: '문', pronunciation: 'mun', english: 'door', emoji: '🚪'},
+                {korean: '열쇠', pronunciation: 'yeol-soe', english: 'key', emoji: '🔑'}
+            ],
+            modern: [
+                {korean: '휴대폰', pronunciation: 'hyu-dae-pon', english: 'mobile phone', emoji: '📱'},
+                {korean: '텔레비전', pronunciation: 'tel-le-bi-jeon', english: 'television', emoji: '📺'},
+                {korean: '라디오', pronunciation: 'ra-di-o', english: 'radio', emoji: '📻'},
+                {korean: '카메라', pronunciation: 'ka-me-ra', english: 'camera', emoji: '📷'}
+            ]
+        };
+
+        const allVocab = [...vocabulary.classroom, ...vocabulary.home, ...vocabulary.modern];
+        const pointers = ['이것은', '그것은', '저것은'];
+        const pointerMeanings = ['this is', 'that is', 'that (far) is'];
+
+        // Initialize particles
+        function createParticles() {
+            const container = document.querySelector('.floating-particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Game functions
+        function setGameMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (gameStarted) {
+                generateQuestion();
+            }
+        }
+
+        function startGame() {
+            gameStarted = true;
+            currentQuestion = 0;
+            generateQuestion();
+            playSound('start');
+        }
+
+        function generateQuestion() {
+            const randomVocab = allVocab[Math.floor(Math.random() * allVocab.length)];
+            const randomPointer = pointers[Math.floor(Math.random() * pointers.length)];
+            
+            let questionText, koreanText, correctAnswer, options;
+            
+            if (currentMode === 'statements') {
+                questionText = `What does this Korean sentence mean?`;
+                koreanText = `${randomPointer} ${randomVocab.korean}입니다.`;
+                correctAnswer = `${pointerMeanings[pointers.indexOf(randomPointer)]} ${randomVocab.english}`;
+                options = generateStatementOptions(correctAnswer, randomVocab);
+            } else if (currentMode === 'questions') {
+                questionText = `How do you ask "Is this ${randomVocab.english}?" in Korean?`;
+                koreanText = `${randomPointer} ${randomVocab.korean}입니까?`;
+                correctAnswer = koreanText;
+                options = generateQuestionOptions(correctAnswer, randomVocab, randomPointer);
+            } else { // mixed
+                const isMixed = Math.random() > 0.5;
+                if (isMixed) {
+                    questionText = `What does this Korean sentence mean?`;
+                    koreanText = `${randomPointer} ${randomVocab.korean}입니다.`;
+                    correctAnswer = `${pointerMeanings[pointers.indexOf(randomPointer)]} ${randomVocab.english}`;
+                    options = generateStatementOptions(correctAnswer, randomVocab);
+                } else {
+                    questionText = `How do you ask "Is this ${randomVocab.english}?" in Korean?`;
+                    koreanText = `${randomPointer} ${randomVocab.korean}입니까?`;
+                    correctAnswer = koreanText;
+                    options = generateQuestionOptions(correctAnswer, randomVocab, randomPointer);
+                }
+            }
+            
+            displayQuestion(questionText, koreanText, randomVocab, options, correctAnswer);
+        }
+
+        function generateStatementOptions(correct, vocab) {
+            const options = [correct];
+            const wrongObjects = allVocab.filter(v => v.korean !== vocab.korean);
+            
+            while (options.length < 4) {
+                const wrongVocab = wrongObjects[Math.floor(Math.random() * wrongObjects.length)];
+                const wrongPointer = pointerMeanings[Math.floor(Math.random() * pointerMeanings.length)];
+                const wrongOption = `${wrongPointer} ${wrongVocab.english}`;
+                
+                if (!options.includes(wrongOption)) {
+                    options.push(wrongOption);
+                }
+            }
+            
+            return shuffleArray(options);
+        }
+
+        function generateQuestionOptions(correct, vocab, pointer) {
+            const options = [correct];
+            const wrongObjects = allVocab.filter(v => v.korean !== vocab.korean);
+            
+            while (options.length < 4) {
+                const wrongVocab = wrongObjects[Math.floor(Math.random() * wrongObjects.length)];
+                const wrongOption = `${pointer} ${wrongVocab.korean}입니까?`;
+                
+                if (!options.includes(wrongOption)) {
+                    options.push(wrongOption);
+                }
+            }
+            
+            return shuffleArray(options);
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function displayQuestion(questionText, koreanText, vocab, options, correctAnswer) {
+            document.getElementById('questionText').textContent = questionText;
+            document.getElementById('koreanText').textContent = koreanText;
+            document.getElementById('objectCard').innerHTML = `
+                <div style="font-size: 3em; margin-bottom: 10px;">${vocab.emoji}</div>
+                <div>${vocab.korean}</div>
+                <div style="font-size: 0.8em; opacity: 0.8;">${vocab.pronunciation}</div>
+                <div style="font-size: 0.9em; margin-top: 5px;">${vocab.english}</div>
+            `;
+            
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(option, correctAnswer, btn);
+                optionsGrid.appendChild(btn);
+            });
+            
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            updateProgress();
+        }
+
+        function checkAnswer(selected, correct, btnElement) {
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(btn => btn.disabled = true);
+            
+            questionsAnswered++;
+            
+            if (selected === correct) {
+                btnElement.classList.add('correct');
+                showFeedback('정말 잘했어요! (Excellent!)', 'correct');
+                correctAnswers++;
+                score += 10 + (streak * 2);
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+                playSound('correct');
+                
+                // Level up every 5 correct answers
+                if (correctAnswers % 5 === 0) {
+                    level++;
+                    showFeedback('🎉 Level Up! 레벨 업! 🎉', 'correct');
+                    playSound('levelup');
+                }
+            } else {
+                btnElement.classList.add('wrong');
+                // Highlight correct answer
+                allBtns.forEach(btn => {
+                    if (btn.textContent === correct) {
+                        btn.classList.add('correct');
+                    }
+                });
+                showFeedback('아니요, 다시 해보세요! (No, try again!)', 'wrong');
+                streak = 0;
+                playSound('wrong');
+            }
+            
+            updateStats();
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function showFeedback(message, type) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+            feedback.style.display = 'block';
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        function updateProgress() {
+            const progress = (questionsAnswered % 10) * 10;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion >= 20) {
+                showCompletionScreen();
+            } else {
+                generateQuestion();
+            }
+        }
+
+        function showCompletionScreen() {
+            const accuracy = Math.round((correctAnswers / questionsAnswered) * 100);
+            const gameArea = document.getElementById('gameArea');
+            
+            gameArea.innerHTML = `
+                <div class="completion-screen">
+                    <div class="completion-title">🎉 축하합니다! 🎉</div>
+                    <div class="completion-title">Congratulations!</div>
+                    <div class="final-score">Final Score: ${score}</div>
+                    <div style="font-size: 1.2em; margin: 20px 0;">
+                        <div>Questions Answered: ${questionsAnswered}</div>
+                        <div>Correct Answers: ${correctAnswers}</div>
+                        <div>Accuracy: ${accuracy}%</div>
+                        <div>Max Streak: ${maxStreak}</div>
+                        <div>Level Reached: ${level}</div>
+                    </div>
+                    <div style="margin: 30px 0;">
+                        ${accuracy >= 80 ? '🌟 Perfect! You\'re a Korean Grammar Master!' : 
+                          accuracy >= 60 ? '👏 Great job! Keep practicing!' : 
+                          '💪 Good effort! Practice makes perfect!'}
+                    </div>
+                    <button class="restart-btn" onclick="restartGame()">🔄 Play Again</button>
+                    <button class="restart-btn" onclick="showProgress()">📊 View Progress</button>
+                </div>
+            `;
+            
+            playSound('complete');
+        }
+
+        function restartGame() {
+            gameStarted = false;
+            currentQuestion = 0;
+            score = 0;
+            level = 1;
+            streak = 0;
+            questionsAnswered = 0;
+            correctAnswers = 0;
+            
+            location.reload();
+        }
+
+        function showInstructions() {
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = `
+                <div class="instructions-screen">
+                    <h2>🎮 How to Play Korean Grammar Adventure</h2>
+                    <p><strong>Objective:</strong> Master Korean grammar through fun challenges!</p>
+                    <ul style="text-align: left; max-width: 600px; margin: 20px auto;">
+                        <li><strong>Choose a Mode:</strong> Select Unit 1 (Statements), Unit 2 (Questions), or Mixed Challenge.</li>
+                        <li><strong>Answer Questions:</strong> Read the question and select the correct answer from the options.</li>
+                        <li><strong>Earn Points:</strong> Get 10 points per correct answer, plus streak bonuses! Level up every 5 correct answers.</li>
+                        <li><strong>Progress:</strong> Complete 20 questions to see your final score and stats.</li>
+                        <li><strong>Feedback:</strong> Instant feedback helps you learn from mistakes.</li>
+                    </ul>
+                    <button class="back-btn" onclick="startGame()">🎮 Back to Game</button>
+                </div>
+            `;
+        }
+
+        function showVocabulary() {
+            const gameArea = document.getElementById('gameArea');
+            let vocabHTML = '<div class="vocabulary-screen"><h2>📖 Vocabulary Guide</h2><div style="display: flex; justify-content: space-around; flex-wrap: wrap;">';
+            
+            for (const category in vocabulary) {
+                vocabHTML += `<div style="margin: 20px; text-align: left; max-width: 300px;"><h3>${category.charAt(0).toUpperCase() + category.slice(1)}</h3><ul>`;
+                vocabulary[category].forEach(item => {
+                    vocabHTML += `<li>${item.korean} (${item.pronunciation}) - ${item.english} ${item.emoji}</li>`;
+                });
+                vocabHTML += '</ul></div>';
+            }
+            
+            vocabHTML += '</div><button class="back-btn" onclick="startGame()">🎮 Back to Game</button></div>';
+            gameArea.innerHTML = vocabHTML;
+        }
+
+        function showProgress() {
+            const accuracy = questionsAnswered > 0 ? Math.round((correctAnswers / questionsAnswered) * 100) : 0;
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = `
+                <div class="progress-screen">
+                    <h2>📊 Your Progress</h2>
+                    <div style="font-size: 1.2em; margin: 20px 0;">
+                        <div>Current Score: ${score}</div>
+                        <div>Level Reached: ${level}</div>
+                        <div>Current Streak: ${streak}</div>
+                        <div>Max Streak: ${maxStreak}</div>
+                        <div>Questions Answered: ${questionsAnswered}</div>
+                        <div>Correct Answers: ${correctAnswers}</div>
+                        <div>Accuracy: ${accuracy}%</div>
+                    </div>
+                    <button class="back-btn" onclick="startGame()">🎮 Back to Game</button>
+                </div>
+            `;
+        }
+
+        // Initialize game
+        createParticles();
+        window.onload = () => {
+            updateStats();
+            updateProgress();
+        };
+    </script>
+</body>
+</html>
