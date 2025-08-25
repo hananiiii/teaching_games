@@ -8,10 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- jsPDF CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- html2canvas CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* Custom styles to complement Tailwind */
         .question-container {
@@ -48,6 +44,7 @@
             grammarScore: 0,
             understandScore: 0
         };
+
         const currentDate = '2025.08.25';
 
         // Questions array (same as provided)
@@ -101,7 +98,7 @@
             ).join('');
         }
 
-        function getSectionTitle(question-thickness) {
+        function getSectionTitle(questionId) {
             if (questionId >= 1 && questionId <= 10) {
                 return '(1-10) 밑줄 친 부분과 반대되는 뜻을 가진 것을 고르십시오.\nChoose the word that has the opposite meaning to the underlined part.';
             } else if (questionId >= 11 && questionId <= 15) {
@@ -149,34 +146,6 @@
             state.score = Math.round(((vocabCount + grammarCount + understandCount) / questions.length) * 100);
             state.showResults = true;
             render();
-        }
-
-        function downloadResults() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const resultsElement = document.querySelector('.bg-white.rounded-lg.shadow-lg.p-8');
-
-            html2canvas(resultsElement, { scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 190; // Width in mm (A4 page width is 210mm, leaving 10mm margins)
-                const pageHeight = 297; // A4 page height in mm
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 10; // Top margin
-
-                doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight - 20; // Account for top and bottom margins
-
-                // Add additional pages if content overflows
-                while (heightLeft > 0) {
-                    doc.addPage();
-                    position = heightLeft - imgHeight;
-                    doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight - 20;
-                }
-
-                doc.save(`${state.name}_KoreanTestResults_${currentDate}.pdf`);
-            });
         }
 
         // Render function
@@ -334,6 +303,7 @@
                                 <div class="flex flex-col items-center">
                                     <h3 class="text-lg font-semibold mb-6 text-gray-800">Performance Radar</h3>
                                     <canvas id="radarChart" class="w-64 h-64"></canvas>
+                                    <!-- Hidden SVG to maintain compatibility with original code -->
                                     <div class="radar-svg">
                                         <svg viewBox="0 0 200 200" class="w-full h-full">
                                             <defs>
@@ -365,10 +335,10 @@
                             </div>
                             <div class="mt-8 pt-6 border-t border-gray-200 text-center">
                                 <button 
-                                    onclick="downloadResults()"
+                                    onclick="window.print()"
                                     class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
                                 >
-                                    Download Results
+                                    Print Results
                                 </button>
                             </div>
                         </div>
