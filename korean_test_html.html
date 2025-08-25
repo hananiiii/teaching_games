@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Level 1 Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            line-height: 1.5;
+            color: #374151;
+        }
+
+        .container {
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .form-container {
+            max-width: 32rem;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .test-container {
+            max-width: 64rem;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .results-container {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .header {
+            text-center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #2563eb;
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .instructions {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .instructions strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+
+        .btn-primary:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background-color: #059669;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #047857;
+        }
+
+        .section-title {
+            background-color: #dbeafe;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #3b82f6;
+            font-weight: bold;
+            color: #1e40af;
+            font-size: 0.875rem;
+            white-space: pre-line;
+        }
+
+        .question-card {
+            background-color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 2rem;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: bold;
+            margin-right: 0.75rem;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .question-content {
+            flex: 1;
+        }
+
+        .question-text {
+            background-color: #eff6ff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid #3b82f6;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .dialogue-line {
+            color: #1d4ed8;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            padding: 1rem;
+            text-align: left;
+            border-radius: 0.5rem;
+            border: 2px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: #f9fafb;
+            border-color: #93c5fd;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-btn.selected {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-number {
+            font-weight: 600;
+            color: #2563eb;
+            margin-right: 0.5rem;
+        }
+
+        .option-text {
+            color: #1f2937;
+        }
+
+        .submit-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            text-center;
+        }
+
+        .submit-info {
+            background-color: #ecfdf5;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1fae5;
+            margin-bottom: 1.5rem;
+        }
+
+        .submit-info h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-info p {
+            font-size: 0.875rem;
+            color: #047857;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #d1d5db;
+            margin-bottom: 2rem;
+        }
+
+        .results-table th,
+        .results-table td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .results-table th {
+            background-color: #f3f4f6;
+            font-weight: 500;
+        }
+
+        .level-placement {
+            background-color: #dcfce7 !important;
+            font-weight: 600;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .results-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .detailed-results h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .score-cell {
+            text-align: center;
+        }
+
+        .score-cell.vocab { background-color: #eff6ff; }
+        .score-cell.grammar { background-color: #f0fdf4; }
+        .score-cell.understand { background-color: #fefce8; }
+
+        .radar-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .radar-chart h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 16rem;
+            height: 16rem;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .disclaimer {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .print-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Registration Form -->
+    <div id="registration-form" class="container">
+        <div class="form-container">
+            <div class="card">
+                <div class="header">
+                    <h1>한국어 능력 평가 시험 (Level 1)</h1>
+                    <p>Korean Proficiency Test - Beginner Level</p>
+                    <p>امتحان تحديد مستوى اللغة الكورية - المستوى الأول</p>
+                </div>
+                
+                <div class="instructions">
+                    <strong>지시사항 (Instructions / التعليمات):</strong>
+                    • 각 문제에서 가장 적절한 답을 선택하세요.<br/>
+                    • Choose the most appropriate answer for each question.<br/>
+                    • اختر الإجابة الأنسب لكل سؤال.
+                </div>
+
+                <form id="student-info-form">
+                    <div class="form-group">
+                        <label>Name / الاسم:</label>
+                        <input type="text" id="student-name" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nationality / الجنسية:</label>
+                        <input type="text" id="student-nationality" placeholder="Enter your nationality" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Year of birth / سنة الميلاد:</label>
+                        <input type="number" id="student-birth-year" placeholder="Enter your birth year" min="1900" max="2010" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        Start Test / ابدأ الاختبار
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Section -->
+    <div id="test-section" class="container hidden">
+        <div class="test-container">
+            <div class="card">
+                <div class="header">
+                    <h1>한국어 능력 평가 시험 (Level 1)</h1>
+                    <p>Korean Proficiency Test - Beginner Level</p>
+                    <p>امتحان تحديد مستوى اللغة الكورية - المستوى الأول</p>
+                </div>
+                
+                <div class="instructions">
+                    <strong>지시사항 (Instructions / التعليمات):</strong>
+                    • 각 문제에서 가장 적절한 답을 선택하세요.<br/>
+                    • Choose the most appropriate answer for each question.<br/>
+                    • اختر الإجابة الأنسب لكل سؤال.
+                </div>
+
+                <div id="questions-container"></div>
+
+                <div class="submit-section">
+                    <div class="submit-info">
+                        <h3>시험 완료 - Test Completed - انتهاء الاختبار</h3>
+                        <p>답안을 검토하고 제출하세요 - Review your answers and submit - راجع إجاباتك وسلّم الاختبار</p>
+                    </div>
+                    <button id="submit-test" class="btn btn-success" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                        🎯 Submit Test / تسليم الاختبار
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="container hidden">
+        <div class="results-container">
+            <div class="card">
+                <div class="results-header">
+                    <div class="logo">세</div>
+                    <div>
+                        <h1 class="results-title">online Korean test results</h1>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto; margin-bottom: 2rem;">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Nationality</th>
+                                <th>Year of birth</th>
+                                <th>Date of exam</th>
+                                <th>Test option</th>
+                                <th>Level Placement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="result-name"></td>
+                                <td id="result-nationality"></td>
+                                <td id="result-birth-year"></td>
+                                <td>2025.08.25</td>
+                                <td>Beginner</td>
+                                <td class="level-placement">3A</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="disclaimer">
+                    ※Level placement result can be adjusted through additional consultation with Korean language teachers or according to each King Sejong Institute's learning condition.
+                </p>
+
+                <div class="results-grid">
+                    <div class="detailed-results">
+                        <h2>Detailed evaluation result</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Details area</th>
+                                        <th>Test Score</th>
+                                        <th>Points possible</th>
+                                        <th>Percentage correct</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 500;">Vocabulary</td>
+                                        <td id="vocab-score" class="score-cell"></td>
+                                        <td class="score-cell">44</td>
+                                        <td id="vocab-percentage" class="score-cell vocab"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 500;">Grammar</td>
+                                        <td id="grammar-score" class="score-cell"></td>
+                                        <td class="score-cell">56</td>
+                                        <td id="grammar-percentage" class="score-cell grammar"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 500;">Understand</td>
+                                        <td id="understand-score" class="score-cell"></td>
+                                        <td class="score-cell">100</td>
+                                        <td id="understand-percentage" class="score-cell understand"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="radar-chart">
+                        <h3>Performance Radar</h3>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 200 200">
+                                <!-- Background circles -->
+                                <circle cx="100" cy="100" r="20" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+                                <circle cx="100" cy="100" r="40" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+                                <circle cx="100" cy="100" r="60" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+                                
+                                <!-- Axis lines -->
+                                <line x1="100" y1="20" x2="100" y2="180" stroke="#e5e7eb" stroke-width="1"/>
+                                <line x1="30" y1="150" x2="170" y2="50" stroke="#e5e7eb" stroke-width="1"/>
+                                <line x1="30" y1="50" x2="170" y2="150" stroke="#e5e7eb" stroke-width="1"/>
+                                
+                                <!-- Data polygon -->
+                                <polygon id="data-polygon" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6" stroke-width="2"/>
+                                
+                                <!-- Data points -->
+                                <circle id="vocab-point" r="4" fill="#3b82f6"/>
+                                <circle id="grammar-point" r="4" fill="#3b82f6"/>
+                                <circle id="understand-point" r="4" fill="#3b82f6"/>
+                                
+                                <!-- Labels -->
+                                <text x="100" y="15" text-anchor="middle" font-size="12" fill="#6b7280">Vocabulary</text>
+                                <text x="185" y="155" text-anchor="middle" font-size="12" fill="#6b7280">Grammar</text>
+                                <text x="15" y="155" text-anchor="middle" font-size="12" fill="#6b7280">Understand</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="print-section no-print">
+                    <button onclick="window.print()" class="btn btn-primary" style="padding: 0.75rem 2rem;">
+                        Print Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student information
+        let studentInfo = {};
+        let answers = {};
+
+        // Questions data
+        const questions = [
+            // Vocabulary Questions (1-10)
+            { id: 1, section: 'vocabulary', type: 'multiple', korean: '가: 이 가방이 크다고 생각해요?\n나: 아니요, 가방이 ( ).', options: ['① 작습니다', '② 큽니다', '③ 좋습니다', '④ 나쁩니다'], correct: '1' },
+            { id: 2, section: 'vocabulary', type: 'multiple', korean: '가: 오늘 날씨가 덥네요.\n나: 네, 어제는 ( ).', options: ['① 더웠어요', '② 추웠어요', '③ 좋았어요', '④ 싫었어요'], correct: '2' },
+            { id: 3, section: 'vocabulary', type: 'multiple', korean: '가: 영화가 재미있었어요?\n나: 아니요, ( ).', options: ['① 재미없었어요', '② 좋았어요', '③ 길었어요', '④ 짧았어요'], correct: '1' },
+            { id: 4, section: 'vocabulary', type: 'multiple', korean: '가: 이 음식이 싸요?\n나: 아니요, ( ).', options: ['① 저렴해요', '② 비싸요', '③ 맛있어요', '④ 달아요'], correct: '2' },
+            { id: 5, section: 'vocabulary', type: 'multiple', korean: '가: 학교가 집에서 멀어요?\n나: 아니요, ( ).', options: ['① 가까워요', '② 좋아요', '③ 커요', '④ 예뻐요'], correct: '1' },
+            { id: 6, section: 'vocabulary', type: 'multiple', korean: '가: 이 방이 밝아요.\n나: 네, 저 방은 ( ).', options: ['① 어두워요', '② 밝아요', '③ 깨끗해요', '④ 넓어요'], correct: '1' },
+            { id: 7, section: 'vocabulary', type: 'multiple', korean: '가: 오빠가 키가 커요?\n나: 아니요, ( ).', options: ['① 키가 작아요', '② 키가 커요', '③ 잘생겼어요', '④ 친절해요'], correct: '1' },
+            { id: 8, section: 'vocabulary', type: 'multiple', korean: '가: 이 커피가 뜨거워요.\n나: 그럼 저 커피는 ( )?', options: ['① 차가워요', '② 뜨거워요', '③ 달아요', '④ 써요'], correct: '1' },
+            { id: 9, section: 'vocabulary', type: 'multiple', korean: '가: 아침에 일찍 일어나요?\n나: 아니요, ( ) 일어나요.', options: ['① 늦게', '② 빨리', '③ 자주', '④ 가끔'], correct: '1' },
+            { id: 10, section: 'vocabulary', type: 'multiple', korean: '가: 이 길이 복잡해요?\n나: 아니요, ( ).', options: ['① 조용해요', '② 시끄러워요', '③ 깨끗해요', '④ 더러워요'], correct: '1' },
+
+            // Grammar Questions (11-20)
+            { id: 11, section: 'grammar', type: 'mark', korean: '저는 (학생 / 이에요 / 입니다).', options: ['① 학생입니다', '② 학생이에요', '③ 학생해요', '④ 학생있어요'], correct: '①' },
+            { id: 12, section: 'grammar', type: 'mark', korean: '친구 (가 / 이 / 을) 만나요.', options: ['① 친구가', '② 친구를', '③ 친구에', '④ 친구로'], correct: '②' },
+            { id: 13, section: 'grammar', type: 'mark', korean: '도서관 (에서 / 에 / 로) 공부해요.', options: ['① 도서관에서', '② 도서관에', '③ 도서관을', '④ 도서관이'], correct: '①' },
+            { id: 14, section: 'grammar', type: 'mark', korean: '이것 (은 / 는 / 을) 뭐예요?', options: ['① 이것은', '② 이것을', '③ 이것에', '④ 이것이'], correct: '①' },
+            { id: 15, section: 'grammar', type: 'mark', korean: '집 (에 / 에서 / 로) 가요.', options: ['① 집에', '② 집에서', '③ 집을', '④ 집으로'], correct: '①' },
+            { id: 16, section: 'grammar', type: 'multiple', korean: '저는 ( )을 먹어요.', options: ['① 책', '② 사과', '③ 펜', '④ 가방'], correct: '2' },
+            { id: 17, section: 'grammar', type: 'multiple', korean: '학교에 ( ) 가요.', options: ['① 버스로', '② 친구와', '③ 공부하러', '④ 책을'], correct: '2' },
+            { id: 18, section: 'grammar', type: 'multiple', korean: '이것은 ( )입니다.', options: ['① 물', '② 선생님', '③ 책상', '④ 꽃'], correct: '3' },
+            { id: 19, section: 'grammar', type: 'multiple', korean: '저는 ( )에 삽니다.', options: ['① 학교', '② 서울', '③ 책', '④ 친구'], correct: '2' },
+            { id: 20, section: 'grammar', type: 'multiple', korean: '( )이/가 좋아요?', options: ['① 음악', '② 집', '③ 물', '④ 가방'], correct: '1' },
+
+            // Understanding Questions (21-40)
+            { id: 21, section: 'understanding', type: 'multiple', korean: '가: 안녕하세요!\n나: ( )', options: ['① 안녕하세요!', '② 안녕히 가세요!', '③ 고맙습니다!', '④ 죄송합니다!'], correct: '1' },
+            { id: 22, section: 'understanding', type: 'multiple', korean: '가: 이름이 뭐예요?\n나: ( )', options: ['① 네, 맞아요', '② 저는 김철수예요', '③ 한국 사람이에요', '④ 20살이에요'], correct: '2' },
+            { id: 23, section: 'understanding', type: 'multiple', korean: '가: 지금 몇 시예요?\n나: ( )', options: ['① 2월이에요', '② 월요일이에요', '③ 3시예요', '④ 한국이에요'], correct: '3' },
+            { id: 24, section: 'understanding', type: 'multiple', korean: '가: 어디에서 왔어요?\n나: ( )', options: ['① 학교에 가요', '② 중국에서 왔어요', '③ 한국어를 공부해요', '④ 책을 읽어요'], correct: '2' },
+            { id: 25, section: 'understanding', type: 'multiple', korean: '가: 뭘 드시겠어요?\n나: ( )', options: ['① 네, 있어요', '② 아니요, 괜찮아요', '③ 커피 주세요', '④ 감사합니다'], correct: '3' },
+            { id: 26, section: 'understanding', type: 'multiple', korean: '가: 어디에 살아요?\n나: ( )', options: ['① 서울에 살아요', '② 책이에요', '③ 학교에요', '④ 친구예요'], correct: '1' },
+            { id: 27, section: 'understanding', type: 'multiple', korean: '가: 뭐하세요?\n나: ( )', options: ['① 공부해요', '② 집에요', '③ 물이에요', '④ 가방이에요'], correct: '1' },
+            { id: 28, section: 'understanding', type: 'multiple', korean: '가: 몇 살이에요?\n나: ( )', options: ['① 25살이에요', '② 책이에요', '③ 집이에요', '④ 학교예요'], correct: '1' },
+            { id: 29, section: 'understanding', type: 'multiple', korean: '가: 맛있어요?\n나: ( )', options: ['① 네, 맛있어요', '② 아니요, 좋아요', '③ 책이에요', '④ 집이에요'], correct: '1' },
+            { id: 30, section: 'understanding', type: 'multiple', korean: '가: 언제 가요?\n나: ( )', options: ['① 내일 가요', '② 책이에요', '③ 집이에요', '④ 물이에요'], correct: '1' },
+            { id: 31, section:
