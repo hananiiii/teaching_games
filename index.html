@@ -25,10 +25,41 @@
         .radar-svg {
             display: none;
         }
+        /* Prevent word splitting for Korean text */
+        .korean-text {
+            word-break: keep-all;
+            overflow-wrap: normal;
+            white-space: normal;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .question-container {
+                padding: 1rem !important; /* Reduced padding on mobile */
+            }
+            .korean-text {
+                font-size: 0.9rem; /* Smaller font size on mobile */
+                line-height: 1.4; /* Tighter line spacing */
+            }
+            .option-button {
+                padding: 0.75rem !important; /* Reduced padding for buttons */
+                font-size: 0.85rem; /* Smaller button text */
+            }
+            .radar-chart-container {
+                width: 100% !important;
+                max-width: 16rem !important; /* Smaller radar chart on mobile */
+            }
+            table {
+                font-size: 0.8rem !important; /* Smaller table text */
+            }
+            th, td {
+                padding: 0.5rem !important; /* Reduced table cell padding */
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen py-8">
-    <div id="app" class="max-w-4xl mx-auto p-6"></div>
+<body class="bg-gray-50 min-h-screen py-4 sm:py-8">
+    <div id="app" class="max-w-4xl mx-auto p-4 sm:p-6"></div>
+
     <script>
         // State management
         let state = {
@@ -93,7 +124,7 @@
         // Helper functions
         function formatQuestionText(text) {
             return text.split('\n').map(line => 
-                `<div class="${line.startsWith('가:') || line.startsWith('나:') ? 'text-blue-700 font-medium' : ''}">${line}</div>`
+                `<div class="korean-text ${line.startsWith('가:') || line.startsWith('나:') ? 'text-blue-700 font-medium' : ''}">${line}</div>`
             ).join('');
         }
 
@@ -152,14 +183,14 @@
             const app = document.getElementById('app');
             if (!state.showTest) {
                 app.innerHTML = `
-                    <div class="max-w-2xl mx-auto p-8">
-                        <div class="bg-white rounded-lg shadow-lg p-8">
-                            <div class="text-center mb-8 pb-6 border-b-2 border-blue-600">
-                                <h1 class="text-3xl font-bold text-gray-800 mb-2">한국어 능력 평가 시험 (Level 1)</h1>
-                                <p class="text-sm text-gray-600 mb-1">Korean Proficiency Test - Beginner Level</p>
-                                <p class="text-sm text-gray-500">امتحان تحديد مستوى اللغة الكورية - المستوى الأول</p>
+                    <div class="max-w-2xl mx-auto p-4 sm:p-8">
+                        <div class="bg-white rounded-lg shadow-lg p-4 sm:p-8">
+                            <div class="text-center mb-6 sm:mb-8 pb-4 sm:pb-6 border-b-2 border-blue-600">
+                                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">한국어 능력 평가 시험 (Level 1)</h1>
+                                <p class="text-xs sm:text-sm text-gray-600 mb-1">Korean Proficiency Test - Beginner Level</p>
+                                <p class="text-xs sm:text-sm text-gray-500">امتحان تحديد مستوى اللغة الكورية - المستوى الأول</p>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-lg mb-6 text-sm text-gray-700">
+                            <div class="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4 sm:mb-6 text-xs sm:text-sm text-gray-700">
                                 <strong>지시사항 (Instructions / التعليمات):</strong><br/>
                                 • 각 문제에서 가장 적절한 답을 선택하세요.<br/>
                                 • Choose the most appropriate answer for each question.<br/>
@@ -167,29 +198,29 @@
                             </div>
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-gray-700 font-medium mb-2">Name / الاسم:</label>
+                                    <label class="block text-gray-700 font-medium mb-2 text-sm sm:text-base">Name / الاسم:</label>
                                     <input
                                         type="text"
                                         id="name"
-                                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        class="w-full border border-gray-300 p-2 sm:p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                                         placeholder="Enter your name"
                                     />
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 font-medium mb-2">Nationality / الجنسية:</label>
+                                    <label class="block text-gray-700 font-medium mb-2 text-sm sm:text-base">Nationality / الجنسية:</label>
                                     <input
                                         type="text"
                                         id="nationality"
-                                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        class="w-full border border-gray-300 p-2 sm:p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                                         placeholder="Enter your nationality"
                                     />
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 font-medium mb-2">Year of birth / سنة الميلاد:</label>
+                                    <label class="block text-gray-700 font-medium mb-2 text-sm sm:text-base">Year of birth / سنة الميلاد:</label>
                                     <input
                                         type="number"
                                         id="birthYear"
-                                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        class="w-full border border-gray-300 p-2 sm:p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                                         placeholder="Enter your birth year"
                                         min="1900"
                                         max="2010"
@@ -198,7 +229,7 @@
                             </div>
                             <button 
                                 id="startButton"
-                                class="w-full mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                                class="w-full mt-4 sm:mt-6 bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
                             >
                                 Start Test / ابدأ الاختبار
                             </button>
@@ -226,83 +257,84 @@
                 const understandPercentage = Math.round((state.understandScore / 100) * 100);
 
                 app.innerHTML = `
-                    <div class="max-w-6xl mx-auto p-8">
-                        <div class="bg-white rounded-lg shadow-lg p-8">
-                            <div class="flex items-center mb-8">
-                                <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center mr-4">
-                                    <span class="text-white font-bold text-lg">세</span>
+                    <div class="max-w-6xl mx-auto p-4 sm:p-8">
+                        <div class="bg-white rounded-lg shadow-lg p-4 sm:p-8">
+                            <div class="flex items-center mb-6 sm:mb-8">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
+                                    <span class="text-white font-bold text-base sm:text-lg">세</span>
                                 </div>
                                 <div>
-                                    <h1 class="text-2xl font-bold text-gray-800">online Korean test results</h1>
+                                    <h1 class="text-xl sm:text-2xl font-bold text-gray-800">online Korean test results</h1>
                                 </div>
                             </div>
-                            <div class="overflow-x-auto mb-8">
+                            <div class="overflow-x-auto mb-6 sm:mb-8">
                                 <table class="w-full border-collapse border border-gray-300">
                                     <thead>
                                         <tr class="bg-gray-100">
-                                            <th class="border border-gray-300 p-3 text-sm font-medium">Name</th>
-                                            <th class="border border-gray-300 p-3 text-sm font-medium">Nationality</th>
-                                            <th class="border border-gray-300 p-3 text-sm font-medium">Year of birth</th>
-                                            <th class="border border-gray-300 p-3 text-sm font-medium">Date of exam</th>
-                                            <th class="border border-gray-300 p-3 text-sm font-medium">Test option</th>
-                                            <th class="border border-gray-300 p-3 text-sm font-medium">Level Placement</th>
+                                            <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Name</th>
+                                            <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Nationality</th>
+                                            <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Year of birth</th>
+                                            <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Date of exam</th>
+                                            <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Test option</th>
+                                            <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Level Placement</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="border border-gray-300 p-3 text-sm">${state.name}</td>
-                                            <td class="border border-gray-300 p-3 text-sm">${state.nationality}</td>
-                                            <td class="border border-gray-300 p-3 text-sm">${state.birthYear}</td>
-                                            <td class="border border-gray-300 p-3 text-sm">${currentDate}</td>
-                                            <td class="border border-gray-300 p-3 text-sm">Beginner</td>
-                                            <td class="border border-gray-300 p-3 text-sm bg-green-100 font-semibold">3A</td>
+                                            <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm">${state.name}</td>
+                                            <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm">${state.nationality}</td>
+                                            <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm">${state.birthYear}</td>
+                                            <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm">${currentDate}</td>
+                                            <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm">Beginner</td>
+                                            <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm bg-green-100 font-semibold">3A</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <p class="text-sm text-gray-600 mb-8">
+                            <p class="korean-text text-xs sm:text-sm text-gray-600 mb-6 sm:mb-8">
                                 ※Level placement result can be adjusted through additional consultation with Korean language teachers or according to each King Sejong Institute's learning condition.
                             </p>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
                                 <div>
-                                    <h2 class="text-xl font-bold text-gray-800 mb-4">Detailed evaluation result</h2>
+                                    <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">Detailed evaluation result</h2>
                                     <div class="overflow-x-auto">
                                         <table class="w-full border-collapse border border-gray-300">
                                             <thead>
                                                 <tr class="bg-gray-100">
-                                                    <th class="border border-gray-300 p-3 text-sm font-medium">Details area</th>
-                                                    <th class="border border-gray-300 p-3 text-sm font-medium">Test Score</th>
-                                                    <th class="border border-gray-300 p-3 text-sm font-medium">Points possible</th>
-                                                    <th class="border border-gray-300 p-3 text-sm font-medium">Percentage correct</th>
+                                                    <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Details area</th>
+                                                    <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Test Score</th>
+                                                    <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Points possible</th>
+                                                    <th class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Percentage correct</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td class="border border-gray-300 p-3 text-sm font-medium">Vocabulary</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center">${state.vocabScore}</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center">44</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center bg-blue-50">${vocabPercentage}%</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Vocabulary</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center">${state.vocabScore}</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center">44</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center bg-blue-50">${vocabPercentage}%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="border border-gray-300 p-3 text-sm font-medium">Grammar</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center">${state.grammarScore}</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center">56</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center bg-green-50">${grammarPercentage}%</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Grammar</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center">${state.grammarScore}</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center">56</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center bg-green-50">${grammarPercentage}%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="border border-gray-300 p-3 text-sm font-medium">Understand</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center">${state.understandScore}</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center">100</td>
-                                                    <td class="border border-gray-300 p-3 text-sm text-center bg-yellow-50">${understandPercentage}%</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm font-medium">Understand</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center">${state.understandScore}</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center">100</td>
+                                                    <td class="border border-gray-300 p-2 sm:p-3 text-xs sm:text-sm text-center bg-yellow-50">${understandPercentage}%</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center">
-                                    <h3 class="text-lg font-semibold mb-6 text-gray-800">Performance Radar</h3>
-                                    <canvas id="radarChart" class="w-64 h-64"></canvas>
-                                    <!-- Hidden SVG to maintain compatibility with original code -->
+                                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-gray-800">Performance Radar</h3>
+                                    <div class="radar-chart-container w-full max-w-xs sm:max-w-sm">
+                                        <canvas id="radarChart" class="w-full h-auto"></canvas>
+                                    </div>
                                     <div class="radar-svg">
                                         <svg viewBox="0 0 200 200" class="w-full h-full">
                                             <defs>
@@ -332,10 +364,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                            <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 text-center">
                                 <button 
                                     onclick="window.print()"
-                                    class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
+                                    class="bg-blue-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md text-sm sm:text-base"
                                 >
                                     Print Results
                                 </button>
@@ -367,7 +399,7 @@
                             r: {
                                 angleLines: { color: '#e5e7eb' },
                                 grid: { color: '#e5e7eb' },
-                                pointLabels: { font: { size: 12 } },
+                                pointLabels: { font: { size: 10 } }, // Smaller labels on mobile
                                 ticks: { beginAtZero: true, max: 100, stepSize: 20 }
                             }
                         },
@@ -378,48 +410,48 @@
                 });
             } else {
                 app.innerHTML = `
-                    <div class="bg-white rounded-lg shadow-lg p-8">
-                        <div class="text-center mb-8 pb-6 border-b-2 border-blue-600">
-                            <h1 class="text-3xl font-bold text-gray-800 mb-2">한국어 능력 평가 시험 (Level 1)</h1>
-                            <p class="text-sm text-gray-600 mb-1">Korean Proficiency Test - Beginner Level</p>
-                            <p class="text-sm text-gray-500">امتحان تحديد مستوى اللغة الكورية - المستوى الأول</p>
+                    <div class="bg-white rounded-lg shadow-lg p-4 sm:p-8">
+                        <div class="text-center mb-6 sm:mb-8 pb-4 sm:pb-6 border-b-2 border-blue-600">
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">한국어 능력 평가 시험 (Level 1)</h1>
+                            <p class="text-xs sm:text-sm text-gray-600 mb-1">Korean Proficiency Test - Beginner Level</p>
+                            <p class="text-xs sm:text-sm text-gray-500">امتحان تحديد مستوى اللغة الكورية - المستوى الأول</p>
                         </div>
-                        <div class="bg-blue-50 p-4 rounded-lg mb-6 text-sm text-gray-700 border-l-4 border-blue-400">
+                        <div class="bg-blue-50 p-3 sm:p-4 rounded-lg mb-4 sm:mb-6 text-xs sm:text-sm text-gray-700 border-l-4 border-blue-400 korean-text">
                             <strong>지시사항 (Instructions / التعليمات):</strong><br/>
                             • 각 문제에서 가장 적절한 답을 선택하세요.<br/>
                             • Choose the most appropriate answer for each question.<br/>
                             • اختر الإجابة الأنسب لكل سؤال.
                         </div>
-                        <div class="space-y-8">
+                        <div class="space-y-6 sm:space-y-8">
                             ${questions.map((q, index) => {
                                 const isNewSection = index === 0 || q.id === 11 || q.id === 16;
                                 return `
                                     <div>
                                         ${isNewSection ? `
-                                            <div class="bg-blue-100 p-4 rounded-lg mb-6 border-l-4 border-blue-500">
-                                                <div class="font-bold text-blue-800 whitespace-pre-line text-sm">
+                                            <div class="bg-blue-100 p-3 sm:p-4 rounded-lg mb-4 sm:mb-6 border-l-4 border-blue-500">
+                                                <div class="font-bold text-blue-800 whitespace-pre-line text-xs sm:text-sm korean-text">
                                                     ${getSectionTitle(q.id)}
                                                 </div>
                                             </div>
                                         ` : ''}
-                                        <div class="question-container bg-gray-50 p-6 rounded-lg border border-gray-200">
+                                        <div class="question-container bg-gray-50 p-4 sm:p-6 rounded-lg border border-gray-200">
                                             <div class="flex items-start mb-4">
-                                                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold mr-3 mt-1">${q.id}</span>
+                                                <span class="bg-blue-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold mr-2 sm:mr-3 mt-1">${q.id}</span>
                                                 <div class="flex-1">
-                                                    <div class="bg-blue-50 p-4 rounded-lg border-l-3 border-l-blue-400 mb-4">
-                                                        <div class="text-base leading-relaxed">${formatQuestionText(q.korean)}</div>
+                                                    <div class="bg-blue-50 p-3 sm:p-4 rounded-lg border-l-3 border-l-blue-400 mb-3 sm:mb-4">
+                                                        <div class="text-sm sm:text-base leading-relaxed korean-text">${formatQuestionText(q.korean)}</div>
                                                     </div>
-                                                    <div class="grid grid-cols-2 gap-3">
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                                         ${q.options.map((option, optIndex) => {
                                                             const optionValue = q.type === 'mark' ? option : (optIndex + 1).toString();
                                                             const isSelected = state.answers[q.id] === optionValue;
                                                             return `
                                                                 <button
                                                                     onclick="handleAnswerChange(${q.id}, '${optionValue}')"
-                                                                    class="option-button p-4 text-left rounded-lg border-2 transition-all duration-200 hover:shadow-md ${isSelected ? 'selected' : 'bg-white border-gray-300 hover:bg-gray-50 hover:border-blue-300'}"
+                                                                    class="option-button p-3 sm:p-4 text-left rounded-lg border-2 transition-all duration-200 hover:shadow-md ${isSelected ? 'selected' : 'bg-white border-gray-300 hover:bg-gray-50 hover:border-blue-300'} text-sm sm:text-base"
                                                                 >
                                                                     <span class="font-semibold text-blue-600 mr-2">${option.split(' ')[0]}</span>
-                                                                    <span class="text-gray-800">${option.substring(option.indexOf(' ') + 1)}</span>
+                                                                    <span class="text-gray-800 korean-text">${option.substring(option.indexOf(' ') + 1)}</span>
                                                                 </button>
                                                             `;
                                                         }).join('')}
@@ -431,14 +463,14 @@
                                 `;
                             }).join('')}
                         </div>
-                        <div class="mt-12 pt-8 border-t border-gray-200 text-center">
-                            <div class="bg-green-50 p-6 rounded-lg border border-green-200 mb-6">
-                                <h3 class="text-lg font-bold text-green-800 mb-2">시험 완료 - Test Completed - انتهاء الاختبار</h3>
-                                <p class="text-sm text-green-700">답안을 검토하고 제출하세요 - Review your answers and submit - راجع إجاباتك وسلّم الاختبار</p>
+                        <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200 text-center">
+                            <div class="bg-green-50 p-4 sm:p-6 rounded-lg border border-green-200 mb-4 sm:mb-6">
+                                <h3 class="text-base sm:text-lg font-bold text-green-800 mb-2 korean-text">시험 완료 - Test Completed - انتهاء الاختبار</h3>
+                                <p class="text-xs sm:text-sm text-green-700 korean-text">답안을 검토하고 제출하세요 - Review your answers and submit - راجع إجاباتك وسلّم الاختبار</p>
                             </div>
                             <button 
                                 onclick="submitTest()"
-                                class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-lg text-lg"
+                                class="bg-green-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-lg text-sm sm:text-lg"
                             >
                                 🎯 Submit Test / تسليم الاختبار
                             </button>
