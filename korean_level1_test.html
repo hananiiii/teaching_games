@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Level 1 Proficiency Test</title>
+    <style>
+        body {
+            font-family: "Malgun Gothic", "맑은 고딕", Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007acc;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .section-title {
+            background-color: #e8f4f8;
+            padding: 10px 15px;
+            margin: 25px 0 15px 0;
+            font-weight: bold;
+            color: #2c5aa0;
+            border-left: 4px solid #007acc;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fafbfc;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 8px;
+        }
+        
+        .question-text {
+            margin-bottom: 12px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .dialogue {
+            background-color: #f0f8ff;
+            padding: 12px;
+            border-left: 3px solid #87ceeb;
+            margin: 10px 0;
+        }
+        
+        .speaker {
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .option {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: white;
+        }
+        
+        .option:hover {
+            background-color: #e8f4f8;
+            border-color: #007acc;
+        }
+        
+        .option-number {
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-right: 5px;
+        }
+        
+        .fill-blank {
+            background-color: #fff9e6;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px dashed #f0ad4e;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            font-size: 14px;
+            color: #495057;
+        }
+        
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">한국어 능력 평가 시험 (Level 1)</div>
+            <div class="subtitle">Korean Proficiency Test - Beginner Level</div>
+            <div class="subtitle">امتحان تحديد مستوى اللغة الكورية - المستوى الأول</div>
+        </div>
+        
+        <div class="instructions">
+            <strong>지시사항 (Instructions / التعليمات):</strong><br>
+            • 각 문제에서 가장 적절한 답을 선택하세요.<br>
+            • Choose the most appropriate answer for each question.<br>
+            • اختر الإجابة الأنسب لكل سؤال.
+        </div>
+
+        <div class="section-title">(1-10) 밑줄 친 부분과 반대되는 뜻을 가진 것을 고르십시오.<br>
+        Choose the word that has the opposite meaning to the underlined part.</div>
+
+        <div class="question">
+            <div class="question-number">1</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 이 가방이 <u>크다</u>고 생각해요?<br>
+                    <span class="speaker">나:</span> 아니요, 가방이 (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 작습니다</div>
+                <div class="option"><span class="option-number">②</span> 큽니다</div>
+                <div class="option"><span class="option-number">③</span> 좋습니다</div>
+                <div class="option"><span class="option-number">④</span> 나쁩니다</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">2</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 오늘 날씨가 <u>덥네요</u>.<br>
+                    <span class="speaker">나:</span> 네, 어제는 (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 더웠어요</div>
+                <div class="option"><span class="option-number">②</span> 추웠어요</div>
+                <div class="option"><span class="option-number">③</span> 좋았어요</div>
+                <div class="option"><span class="option-number">④</span> 싫었어요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">3</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 영화가 <u>재미있었어요</u>?<br>
+                    <span class="speaker">나:</span> 아니요, (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 재미없었어요</div>
+                <div class="option"><span class="option-number">②</span> 좋았어요</div>
+                <div class="option"><span class="option-number">③</span> 길었어요</div>
+                <div class="option"><span class="option-number">④</span> 짧았어요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">4</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 이 음식이 <u>싸요</u>?<br>
+                    <span class="speaker">나:</span> 아니요, (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 저렴해요</div>
+                <div class="option"><span class="option-number">②</span> 비싸요</div>
+                <div class="option"><span class="option-number">③</span> 맛있어요</div>
+                <div class="option"><span class="option-number">④</span> 달아요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">5</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 학교가 집에서 <u>멀어요</u>?<br>
+                    <span class="speaker">나:</span> 아니요, (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 가까워요</div>
+                <div class="option"><span class="option-number">②</span> 좋아요</div>
+                <div class="option"><span class="option-number">③</span> 커요</div>
+                <div class="option"><span class="option-number">④</span> 예뻐요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">6</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 이 방이 <u>밝아요</u>.<br>
+                    <span class="speaker">나:</span> 네, 저 방은 (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 어두워요</div>
+                <div class="option"><span class="option-number">②</span> 밝아요</div>
+                <div class="option"><span class="option-number">③</span> 깨끗해요</div>
+                <div class="option"><span class="option-number">④</span> 넓어요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">7</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 오빠가 <u>키가 커요</u>?<br>
+                    <span class="speaker">나:</span> 아니요, (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 키가 작아요</div>
+                <div class="option"><span class="option-number">②</span> 키가 커요</div>
+                <div class="option"><span class="option-number">③</span> 잘생겼어요</div>
+                <div class="option"><span class="option-number">④</span> 친절해요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">8</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 이 커피가 <u>뜨거워요</u>.<br>
+                    <span class="speaker">나:</span> 그럼 저 커피는 (<span class="fill-blank"></span>)?
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 차가워요</div>
+                <div class="option"><span class="option-number">②</span> 뜨거워요</div>
+                <div class="option"><span class="option-number">③</span> 달아요</div>
+                <div class="option"><span class="option-number">④</span> 써요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">9</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 아침에 <u>일찍</u> 일어나요?<br>
+                    <span class="speaker">나:</span> 아니요, (<span class="fill-blank"></span>) 일어나요.
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 늦게</div>
+                <div class="option"><span class="option-number">②</span> 빨리</div>
+                <div class="option"><span class="option-number">③</span> 자주</div>
+                <div class="option"><span class="option-number">④</span> 가끔</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">10</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 이 길이 <u>복잡해요</u>?<br>
+                    <span class="speaker">나:</span> 아니요, (<span class="fill-blank"></span>).
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 조용해요</div>
+                <div class="option"><span class="option-number">②</span> 시끄러워요</div>
+                <div class="option"><span class="option-number">③</span> 깨끗해요</div>
+                <div class="option"><span class="option-number">④</span> 더러워요</div>
+            </div>
+        </div>
+
+        <div class="section-title">(11-15) 알맞은 것에 O 하십시오.<br>
+        Mark O for the right one.</div>
+
+        <div class="question">
+            <div class="question-number">11</div>
+            <div class="question-text">저는 (학생 / 이에요 / 입니다).</div>
+            <div class="options">
+                <div class="option"><span class="option-number">O</span> 학생입니다</div>
+                <div class="option"><span class="option-number">O</span> 학생이에요</div>
+                <div class="option"><span class="option-number">O</span> 학생해요</div>
+                <div class="option"><span class="option-number">O</span> 학생있어요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">12</div>
+            <div class="question-text">친구 (가 / 이 / 을) 만나요.</div>
+            <div class="options">
+                <div class="option"><span class="option-number">O</span> 친구가</div>
+                <div class="option"><span class="option-number">O</span> 친구를</div>
+                <div class="option"><span class="option-number">O</span> 친구에</div>
+                <div class="option"><span class="option-number">O</span> 친구로</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">13</div>
+            <div class="question-text">도서관 (에서 / 에 / 로) 공부해요.</div>
+            <div class="options">
+                <div class="option"><span class="option-number">O</span> 도서관에서</div>
+                <div class="option"><span class="option-number">O</span> 도서관에</div>
+                <div class="option"><span class="option-number">O</span> 도서관을</div>
+                <div class="option"><span class="option-number">O</span> 도서관이</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">14</div>
+            <div class="question-text">이것 (은 / 는 / 을) 뭐예요?</div>
+            <div class="options">
+                <div class="option"><span class="option-number">O</span> 이것은</div>
+                <div class="option"><span class="option-number">O</span> 이것을</div>
+                <div class="option"><span class="option-number">O</span> 이것에</div>
+                <div class="option"><span class="option-number">O</span> 이것이</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">15</div>
+            <div class="question-text">집 (에 / 에서 / 로) 가요.</div>
+            <div class="options">
+                <div class="option"><span class="option-number">O</span> 집에</div>
+                <div class="option"><span class="option-number">O</span> 집에서</div>
+                <div class="option"><span class="option-number">O</span> 집을</div>
+                <div class="option"><span class="option-number">O</span> 집으로</div>
+            </div>
+        </div>
+
+        <div class="section-title">(16-20) 가장 알맞은 답을 고르십시오.<br>
+        Choose the most appropriate answer.</div>
+
+        <div class="question">
+            <div class="question-number">16</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 안녕하세요!<br>
+                    <span class="speaker">나:</span> (<span class="fill-blank"></span>)
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 안녕하세요!</div>
+                <div class="option"><span class="option-number">②</span> 안녕히 가세요!</div>
+                <div class="option"><span class="option-number">③</span> 고맙습니다!</div>
+                <div class="option"><span class="option-number">④</span> 죄송합니다!</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">17</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 이름이 뭐예요?<br>
+                    <span class="speaker">나:</span> (<span class="fill-blank"></span>)
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 네, 맞아요</div>
+                <div class="option"><span class="option-number">②</span> 저는 김철수예요</div>
+                <div class="option"><span class="option-number">③</span> 한국 사람이에요</div>
+                <div class="option"><span class="option-number">④</span> 20살이에요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">18</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 지금 몇 시예요?<br>
+                    <span class="speaker">나:</span> (<span class="fill-blank"></span>)
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 2월이에요</div>
+                <div class="option"><span class="option-number">②</span> 월요일이에요</div>
+                <div class="option"><span class="option-number">③</span> 3시예요</div>
+                <div class="option"><span class="option-number">④</span> 한국이에요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">19</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 어디에서 왔어요?<br>
+                    <span class="speaker">나:</span> (<span class="fill-blank"></span>)
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 학교에 가요</div>
+                <div class="option"><span class="option-number">②</span> 중국에서 왔어요</div>
+                <div class="option"><span class="option-number">③</span> 한국어를 공부해요</div>
+                <div class="option"><span class="option-number">④</span> 책을 읽어요</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">20</div>
+            <div class="question-text">
+                <div class="dialogue">
+                    <span class="speaker">가:</span> 뭘 드시겠어요?<br>
+                    <span class="speaker">나:</span> (<span class="fill-blank"></span>)
+                </div>
+            </div>
+            <div class="options">
+                <div class="option"><span class="option-number">①</span> 네, 있어요</div>
+                <div class="option"><span class="option-number">②</span> 아니요, 괜찮아요</div>
+                <div class="option"><span class="option-number">③</span> 커피 주세요</div>
+                <div class="option"><span class="option-number">④</span> 감사합니다</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; text-align: center;">
+            <strong>시험 완료 - Test Completed - انتهاء الاختبار</strong><br>
+            <small style="color: #666;">답안을 검토하고 제출하세요 - Review your answers and submit - راجع إجاباتك وسلّم الاختبار</small>
+        </div>
+    </div>
+
+    <script>
+        // Add click functionality to options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selection from other options in the same question
+                const question = this.closest('.question');
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.style.backgroundColor = 'white';
+                    opt.style.borderColor = '#ddd';
+                });
+                
+                // Highlight selected option
+                this.style.backgroundColor = '#e8f4f8';
+                this.style.borderColor = '#007acc';
+            });
+        });
+
+        // Print functionality
+        window.print = function() {
+            window.print();
+        };
+    </script>
+</body>
+</html>
